@@ -22,6 +22,8 @@ SMOOTHING = 6              # number of recent frequency estimates to median-smoo
 # Limits for expected pitch (helps avoid octave errors)
 MIN_FREQUENCY = 65.0       # e.g., low C2 ~ 65Hz (Can be raised for higher note songs)
 MAX_FREQUENCY = 2000.0     # upper bound for detection
+LOWEST_NOTE_HZ = 246.94    # B3 lower frequency cap
+
 
 device = None  
 
@@ -129,8 +131,14 @@ def run_realtime():
                         frame = frame.astype(np.float32)
 
                     freq = detect_pitch_autocorr(frame, SAMPLE_RATE)
-                    if freq is not None:
+
+                    # if freq is not None:
+                    #     recent_freqs.append(freq)
+
+
+                    if freq is not None and freq >= LOWEST_NOTE_HZ:
                         recent_freqs.append(freq)
+
                         if len(recent_freqs) > SMOOTHING:
                             recent_freqs.pop(0)
                         display_freq = float(np.median(recent_freqs))
