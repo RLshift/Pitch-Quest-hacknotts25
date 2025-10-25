@@ -15,7 +15,7 @@ from collections import deque
 
 # ---------- Adaptive noise cancellation ----------
 ENERGY_HISTORY = deque(maxlen=50) # store past energies
-NOISE_MULTIPLIER = 1.8 # lower = more sensitive
+NOISE_MULTIPLIER = 1.8 # lower = more sensitive, higher = more strict
 
 # ---------- SETTINGS ----------
 SAMPLE_RATE = 44100        # Hz
