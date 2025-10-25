@@ -16,11 +16,13 @@ circle = shapes.Circle(700, 150, 100,
                        color=(50, 225, 30),
                        batch=batch)
 
+
+
 @window.event
 def on_draw():
     window.clear()
-    batch.draw()
     pic.blit(0, 0, 0)
+    batch.draw()
 
 
 pyglet.app.run()
