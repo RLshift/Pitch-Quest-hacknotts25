@@ -10,11 +10,11 @@ import csv
 SAMPLE_RATE = 44100
 FRAME_SIZE = 4096
 HOP_SIZE = 512
-SMOOTHING = 50
+SMOOTHING = 55
 MIN_FREQUENCY = 250.0
 MAX_FREQUENCY = 2000.0
 LOWEST_NOTE_HZ = 246.0  # B3 lower
-OUTPUT_CSV = "output/nights.csv"
+OUTPUT_CSV = "output/dont_stop.csv"
 MIN_NOTE_DURATION = 0.1  # ignore notes shorter than this (in seconds)
 
 # ---------- frequency -> note ----------
@@ -137,4 +137,4 @@ def analyze_mp3_to_csv(filename):
 
 
 if __name__ == "__main__":
-    analyze_mp3_to_csv("songs/nights.mov")
+    analyze_mp3_to_csv("songs/dont_stop.mov")
