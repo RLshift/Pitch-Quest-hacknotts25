@@ -11,11 +11,6 @@ import math
 import time
 import numpy as np
 import sounddevice as sd
-from collections import deque
-
-# ---------- Adaptive noise cancellation ----------
-ENERGY_HISTORY = deque(maxlen=50) # store past energies
-NOISE_MULTIPLIER = 1.8 # lower = more sensitive, higher = more strict
 
 # ---------- SETTINGS ----------
 SAMPLE_RATE = 44100        # Hz
@@ -25,9 +20,8 @@ BUFFER_MAX_SECONDS = 5.0   # safety cap for internal queue
 SMOOTHING = 6              # number of recent frequency estimates to median-smooth for display
 
 # Limits for expected pitch (helps avoid octave errors)
-MIN_FREQUENCY = 65.0     # e.g., low C2 ~ 65Hz (Can be raised for higher note songs)
+MIN_FREQUENCY = 65.0       # e.g., low C2 ~ 65Hz (Can be raised for higher note songs)
 MAX_FREQUENCY = 2000.0     # upper bound for detection
-LOWEST_NOTE_HZ = 246.0      # B3 lower
 
 device = None  
 
@@ -134,18 +128,8 @@ def run_realtime():
                     else:
                         frame = frame.astype(np.float32)
 
-                    # Ignore background
-                    energy = np.sum(frame ** 2) / len (frame)
-                    ENERGY_HISTORY.append(energy)
-
-                    adaptive_threshold = np.mean(ENERGY_HISTORY) * NOISE_MULTIPLIER if ENERGY_HISTORY else 1e-6
-
-                    if energy < adaptive_threshold:
-                        freq = None
-                    else:
-                        freq = detect_pitch_autocorr(frame, SAMPLE_RATE)
-
-                    if freq is not None and freq >= LOWEST_NOTE_HZ:
+                    freq = detect_pitch_autocorr(frame, SAMPLE_RATE)
+                    if freq is not None:
                         recent_freqs.append(freq)
                         if len(recent_freqs) > SMOOTHING:
                             recent_freqs.pop(0)
@@ -172,3 +156,5 @@ def run_realtime():
 
 if __name__ == "__main__":
     run_realtime()
+
+
