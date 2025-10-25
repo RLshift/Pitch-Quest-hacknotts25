@@ -5,6 +5,8 @@ from spotipy.oauth2 import SpotifyOAuth
 from spotipy.cache_handler import FlaskSessionCacheHandler
 
 import os 
+import random
+import time
 
 from flask import Flask, redirect, request, session, url_for
 
@@ -15,6 +17,7 @@ client_id = '06d3f79e124a42bea66225da339d210f'
 client_secret = 'ba00699a77aa43238fa6b022ff19ca71'
 redirect_uri = 'https://127.0.0.1:5000/callback'
 scope = 'playlist-read-private, user-modify-playback-state'
+tracks = []
 
 cache_handler = FlaskSessionCacheHandler(session)
 
@@ -48,20 +51,47 @@ def get_playlists():
         return redirect(auth_url)
     playlists = sp.current_user_playlists()
     playlists_info = [(pl['name'], pl['external_urls']['spotify']) for pl in playlists['items']]
-    print("#######################################")
-    print(playlists_info)
-    print("#######################################")
-    playlists_html = '<br><br>'.join([f'{name}: {url}' for name, url in playlists_info])
+    # playlists_html = '<br><br>'.join([f'{name}: {url}' for name, url in playlists_info])
 
-    sp.start_playback(uris=['spotify:track:52okn5MNA47tk87PeZJLEL'])
-
-
-    return playlists_html
+    # WIP change to playlist after
+    track_info = get_track_info("2UuPXwlzXhH9lUNDSeG6cq")
+    return playing(track_info, 1)
 
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('home'))
+
+# get array of track uri with playlist url
+def get_track_info(playlist_uri):
+    tracks = []
+    # playlist_uri = playlist_url.rfind("/")
+    for track in sp.playlist_tracks(playlist_uri)["items"]:
+        track_uri = track["track"]["uri"]
+        track_name = track["track"]["name"]
+        result = track_name, track_uri
+        tracks.append(result)
+    return tracks
+
+def get_random_track(tracks):
+    ran_track = random.choice(tracks)
+    tracks.remove(ran_track)
+    print(f"\n\nPLAYING: {ran_track}")
+    return ran_track
+
+@app.route('/playing')
+def playing(track_info, run_times):
+    start_playing = random.randint(40000, 50000)
+    ran_track = get_random_track(track_info)
+    sp.start_playback(uris=[ran_track[1]], position_ms=start_playing)
+    time.sleep(6)
+    sp.pause_playback()
+    time.sleep(1)
+    if (run_times-1 == 0):
+        return '<br>'
+    else:
+        return playing(track_info, run_times-1)
+    
 
 
 if __name__ == '__main__':

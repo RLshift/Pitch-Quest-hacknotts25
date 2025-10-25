@@ -3,8 +3,9 @@
 [Importing Songs](/spotifyAPI.py)
 [Testing API](/index.html)
 
-## Before running program 
-- pip install spotipy library
+## Libraries 
+- Spotipy (Spotify Player's API)
+- Flask
 
 ## Problems 
 1. Spotify only supports https redirect URIs 
