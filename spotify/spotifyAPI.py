@@ -83,10 +83,33 @@ def get_random_track(tracks):
 def playing(track_info, run_times):
     start_playing = random.randint(40000, 50000)
     ran_track = get_random_track(track_info)
-    sp.start_playback(uris=[ran_track[1]], position_ms=start_playing)
-    time.sleep(6)
+    # sp.start_playback(uris=[ran_track[1]], position_ms=start_playing)
+    # Dont Stop
+    sp.start_playback(uris=['spotify:track:4PCVZGch6Q57RVAcai9L8u'], position_ms=33000)
+    time.sleep(11.8)
     sp.pause_playback()
     time.sleep(1)
+    # The Nights
+    sp.start_playback(uris=['spotify:track:0ct6r3EGTcMLPtrXHDvVjc'], position_ms=79000)
+    time.sleep(6.5)
+    sp.pause_playback()
+    time.sleep(1)
+    # Kilby Girl
+    sp.start_playback(uris=['spotify:track:1170VohRSx6GwE6QDCHPPH'], position_ms=37000)
+    time.sleep(5.4)
+    sp.pause_playback()
+    time.sleep(1)
+    #Stargazing
+    sp.start_playback(uris=['spotify:track:3Vr3zh0r7ALn8VLqCiRR10'], position_ms=39000)
+    time.sleep(6.8)
+    sp.pause_playback()
+    time.sleep(1)
+    # Coulda been me
+    sp.start_playback(uris=['spotify:track:3IyCL4Em1GOpNGDf451Hg1'], position_ms=39000)
+    time.sleep(6.6)
+    sp.pause_playback()
+    ## The nights, Kilby girl, dont stop, stargazing, coulda been me 
+    ##
     if (run_times-1 == 0):
         return '<br>'
     else:
