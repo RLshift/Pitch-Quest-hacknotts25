@@ -1,7 +1,6 @@
 ## Song Conversion using Spotipy Library 
 ### Files
 [Importing Songs](/spotifyAPI.py)
-[Testing API](/index.html)
 
 ## Libraries 
 - Spotipy (Spotify Player's API)
@@ -14,6 +13,7 @@
 - [reference] (https://blog.miguelgrinberg.com/post/running-your-flask-application-over-https)
 
 2. User has to activate their device audio output before the program can change the song
+- fixed with page authorising spotify account
 
 3. User has to have spotify in the background for the song to change 
-NOTE -- Music can be changed but not implemented (currently only playing "NF - Let you down" once "/get_playlists" page is loaded)
+- magically worked during development phase
