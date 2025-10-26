@@ -25,7 +25,7 @@ playerHealthStatus2 = [2]
 playerHealthStatus3 = [3]
 
 dragonMaxHealth = 60
-dragonHealth = 15
+dragonHealth = 58
 dragonHBRatio = dragonHealth/dragonMaxHealth
 
 background = pyglet.graphics.Group(order=0)
@@ -66,14 +66,11 @@ powerup1Sprite = pyglet.sprite.Sprite(img=shield, x=powerupP1[0], y=powerupP1[1]
 powerup2Sprite = pyglet.sprite.Sprite(img=potion, x=powerupP2[0], y=powerupP2[1], batch=batch)
 powerup3Sprite = pyglet.sprite.Sprite(img=doubleDamage, x=powerupP3[0], y=powerupP3[1], batch=batch)
 
-#width, height = flautist.width, flautist.height
-
 
 @window.event
 def on_draw():
     window.clear()
     pic.blit(0, 0, 0)
-    #sprite.draw()
     batch.draw()
 
 
