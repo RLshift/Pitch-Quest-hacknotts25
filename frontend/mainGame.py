@@ -71,6 +71,14 @@ flautist = image.load('images/flautist.png')
 # dragon = image.load('images/dragon.png')
 ani = pyglet.resource.animation('images/dragon.gif')
 dragon = pyglet.sprite.Sprite(img=ani)
+images = [pyglet.resource.image('injury.png'),
+          pyglet.resource.image('injury brighter.png'),
+          pyglet.resource.image('injury.png'),
+          pyglet.resource.image('injury brighter.png')]
+
+ani = pyglet.image.Animation.from_image_sequence(images, duration=0.1, loop=True)
+hurting = pyglet.sprite.Sprite(img=ani)
+
 playerHealthFull = image.load('images/playerHealthFull.png')
 playerHealthHalf = image.load('images/playerHealthHalf.png')
 playerHealthDead = image.load('images/playerHealthDead.png')
@@ -140,6 +148,8 @@ def isPointInsideSprite(x, y, sprite):
             sprite.y <= y <= sprite.y + sprite.height)
 
 animSprite = pyglet.sprite.Sprite(dragon_animation)
+aniHurtingSprite = pyglet.sprite.Sprite(ani)
+
 
 @window.event
 def on_mouse_press(x, y, button, modifiers):  # FIXED: Changed from onMousePress
@@ -158,5 +168,6 @@ def on_draw():
     else:
         batch.draw()
         animSprite.draw()
+        aniHurtingSprite.draw()
 
 pyglet.app.run()
