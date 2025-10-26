@@ -20,6 +20,9 @@ dra = Dragon()
 plr = Player()
 songs = ["nights", "stargazing", "dont_stop", "coulda_been_me", "kilby_girl"]
 
+def getEntities():
+    return dra, plr 
+
 while not end: 
     song_index = random.randint(0,4)
     spotifyAPI.runApp(songs[song_index])

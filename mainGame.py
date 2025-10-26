@@ -3,10 +3,14 @@ from pyglet.window import mouse
 
 # importing shapes from pyglet library
 from pyglet import shapes
+from frontend import main
+from frontend.main import *
 
 # Canvas
 window = pyglet.window.Window(2560, 1440)
 batch = pyglet.graphics.Batch()
+
+dra, plr = main.getEntities()
 
 from pyglet import image
 start_screen = image.load('images/backgroundStartScreen.png')
