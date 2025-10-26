@@ -14,3 +14,10 @@
     * **Original Artwork:** [Sophie Fung | Opixior](https://github.com/Opixior)
 *   ***Dragon:***
     * **Original Artwork:** [Sophie Fung | Opixior](https://github.com/Opixior)
+
+*   ***Player Health:***
+    * **Original Artwork:** [Vector Images](https://www.vecteezy.com/members/vectortradition)
+*   ***Player Health Dead:***
+    * **Original Artwork:** [John3](https://toppng.com/john3)
+
+    
