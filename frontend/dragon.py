@@ -7,6 +7,12 @@ class Dragon:
     def getMaxHealth(self):
         return self.maxHealth
     
+    def setMaxHealth(self, health):
+        self.health = health
+
+    def setHealth(self,health):
+        self.health = health
+    
     def getHealth(self):
         return self.health
     

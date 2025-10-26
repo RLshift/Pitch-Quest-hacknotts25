@@ -24,7 +24,7 @@ def _load_notes(csv_path: Path):
     return notes
 
 def freq_to_note(freq, A4=440.0):
-    if freq <= 0:
+    if freq <= 0.0:
         return None
     
     midi = 69 + 12 * math.log2(freq / A4)
