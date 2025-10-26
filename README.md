@@ -20,4 +20,9 @@
 *   ***Player Health Dead:***
     * **Original Artwork:** [John3](https://toppng.com/john3)
 
-    
+*   ***Shield:***
+    * **Original Artwork:** [Vector Images](https://www.vecteezy.com/members/vectortradition)
+*   ***Potion:***
+    * **Original Artwork:** [Vector Images](https://www.vecteezy.com/members/vectortradition)
+*   ***DoubleDamageBook:***
+    * **Original Artwork:** [Vector Images](https://www.vecteezy.com/members/vectortradition)
