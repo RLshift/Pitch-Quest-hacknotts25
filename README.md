@@ -15,8 +15,10 @@
 *   ***Dragon:***
     * **Original Artwork:** [Sophie Fung | Opixior](https://github.com/Opixior)
 
-*   ***Player Health:***
+*   ***Player Health Full:***
     * **Original Artwork:** [Vector Images](https://www.vecteezy.com/members/vectortradition)
+*   ***Player Health Half:***
+    * **Original Artwork:** [inamiku Nanami](https://www.vecteezy.com/members/inamiku)
 *   ***Player Health Dead:***
     * **Original Artwork:** [John3](https://toppng.com/john3)
 
