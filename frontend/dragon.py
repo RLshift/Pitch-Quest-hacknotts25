@@ -1,6 +1,6 @@
 class Dragon: 
     def __init__(self):
-        self.health = 100
+        self.health = 60
         self.alive = True
     
     def getHealth(self):
@@ -12,3 +12,4 @@ class Dragon:
     def checkAlive(self):
         if self.health == 0:
             self.alive = False
+
