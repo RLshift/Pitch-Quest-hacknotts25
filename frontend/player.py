@@ -9,6 +9,7 @@ class Player:
         self.potion = False
         self.combo = False
         self.usingShield = False
+        self.pu = [False,False,False]
 
     def getHealth(self):
         return self.health
