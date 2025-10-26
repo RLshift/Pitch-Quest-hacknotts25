@@ -29,8 +29,8 @@ gameplay_screen = image.load('images/backgroundGamePlay.png')
 
 songPick = random.choice(songs)
 noteArray = Notes.getNotes(songPick)  
-dra.setMaxHealth(len(noteArray))
-dra.setHealth(len(noteArray))
+#dra.setMaxHealth(len(noteArray))
+#dra.setHealth(len(noteArray))
 
 # At the top with your other variables
 user_input = ""
@@ -145,6 +145,8 @@ potion = image.load('images/potion.png')
 doubleDamage = image.load('images/doubleDamage.png')
 dragonHealthBarImage = image.load('images/dragonHealthBarBorder.png')
 fireball = image.load('images/fireball.png')
+dragon_animation = pyglet.image.load_animation("images/dragon.gif")
+
 
 # After all your image loads, create these as global variables
 flautistSprite = None
@@ -182,11 +184,10 @@ def redraw():
     powerUpStatus3 = statusUpdateValues[5]
     dragonHBRatio = statusUpdateValues[6]
 
-flautistSprite = pyglet.sprite.Sprite(img=flautist, x=380, y=-25, batch=batch)
-dragon_animation = pyglet.image.load_animation("images/dragon.gif")
-#dragonSprite = pyglet.sprite.Sprite(img=dragon, x=1180, y=450, batch=batch)
-playerHealthBackground= shapes.Rectangle(35, 50, 500, 130, color=(164,164,164,180), batch=batch)
-playerHealthBorder= shapes.Box(33, 48, 502, 132, thickness=5,color=(87,87,87), batch=batch)
+    flautistSprite = pyglet.sprite.Sprite(img=flautist, x=380, y=-25, batch=batch)
+    #dragonSprite = pyglet.sprite.Sprite(img=dragon, x=1180, y=450, batch=batch)
+    playerHealthBackground= shapes.Rectangle(35, 50, 500, 130, color=(164,164,164,180), batch=batch)
+    playerHealthBorder= shapes.Box(33, 48, 502, 132, thickness=5,color=(87,87,87), batch=batch)
 
     inventoryBackground= shapes.Rectangle(55, 370, 200, 700, color=(164,164,164,220), batch=batch)
     inventoryBorder= shapes.Box(53, 372, 202, 702, thickness=8,color=(87,87,87), batch=batch)
@@ -317,11 +318,12 @@ def on_draw():
         startButtonSprite.draw()
     else:
         batch.draw()
+        animSprite.draw()
+        aniHurtingSprite.draw()
         array_label.draw()
         input_label.draw()
         user_text_label.draw()
 
-        animSprite.draw()
-        aniHurtingSprite.draw()
+
 
 pyglet.app.run()
