@@ -23,7 +23,7 @@ NOTE_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F',
 
 
 def freq_to_note_name(freq, A4=440.0):
-    if freq is None or freq <= 0:
+    if freq is None or freq <= 0.0:
         return ("-", None, None)
     midi = 69 + 12 * math.log2(freq / A4)
     midi_round = int(round(midi))

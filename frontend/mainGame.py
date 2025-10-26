@@ -7,6 +7,10 @@ import player as Player
 from player import *
 import dragon as Dragon
 from dragon import *
+import notes as Notes
+from notes import *
+import time
+import random
 
 #from frontend import main
 #from main import *
@@ -17,10 +21,14 @@ batch = pyglet.graphics.Batch()
 
 dra = Dragon()
 plr = Player()
+songs = ["nights", "stargazing", "dont_stop", "coulda_been_me", "kilby_girl"]
 
 from pyglet import image
 start_screen = image.load('images/backgroundStartScreen.png')
 gameplay_screen = image.load('images/backgroundGamePlay.png')
+
+songPick = random.choice(songs)
+noteArray = Notes.getNotes(songPick)  
 
 # Use a list to make it mutable in nested functions
 game_state = {'started': False}
@@ -36,9 +44,10 @@ width, height = pic.width, pic.height
 
 def startButtonAction():
     print("Start Button clicked!")
+    
+    print(noteArray)
     game_state['started'] = True
-    #Call main?
-    # main()
+
 
 startButton = pyglet.image.load('images/startButton.png')
 startButtonSprite = pyglet.sprite.Sprite(startButton, 600, y=420)
@@ -58,8 +67,6 @@ powerupP1 = [33,850, plr.pu[0]]
 powerupP2 = [33,610, plr.pu[1]]
 powerupP3 = [33,370, plr.pu[2]]
 
-
-
 flautist = image.load('images/flautist.png')
 dragon = image.load('images/dragon.png')
 playerHealthFull = image.load('images/playerHealthFull.png')
@@ -71,7 +78,7 @@ doubleDamage = image.load('images/doubleDamage.png')
 dragonHealthBarImage = image.load('images/dragonHealthBarBorder.png')
 fireball = image.load('images/fireball.png')
 
-
+                                                                                                                      
 #0 = Full, 1 = Half, 2 = Dead, Complete player Health = 6
 # Complete player Health = 6
 health = plr.getHealth()
@@ -113,6 +120,15 @@ powerup1Sprite = pyglet.sprite.Sprite(img=shield, x=powerupP1[0], y=powerupP1[1]
 powerup2Sprite = pyglet.sprite.Sprite(img=potion, x=powerupP2[0], y=powerupP2[1], batch=batch)
 powerup3Sprite = pyglet.sprite.Sprite(img=doubleDamage, x=powerupP3[0], y=powerupP3[1], batch=batch)
 
+
+# Create a label to display the array
+array_label = pyglet.text.Label(
+    str(noteArray),  # Convert array to string
+    font_name='Arial',
+    font_size=16,
+    x=50, y=550,
+    color=(255, 255, 255, 255)  # White text (R, G, B, Alpha)
+)
 
 def isPointInsideSprite(x, y, sprite):
     """Check if a point (x, y) is inside the sprite's bounds"""
