@@ -71,10 +71,10 @@ flautist = image.load('images/flautist.png')
 # dragon = image.load('images/dragon.png')
 ani = pyglet.resource.animation('images/dragon.gif')
 dragon = pyglet.sprite.Sprite(img=ani)
-images = [pyglet.resource.image('injury.png'),
-          pyglet.resource.image('injury brighter.png'),
-          pyglet.resource.image('injury.png'),
-          pyglet.resource.image('injury brighter.png')]
+images = [pyglet.resource.image('images/injury.png'),
+          pyglet.resource.image('images/injury brighter.png'),
+          pyglet.resource.image('images/injury.png'),
+          pyglet.resource.image('images/injury brighter.png')]
 
 ani = pyglet.image.Animation.from_image_sequence(images, duration=0.1, loop=True)
 hurting = pyglet.sprite.Sprite(img=ani)
@@ -142,14 +142,20 @@ array_label = pyglet.text.Label(
 )
 
 def isPointInsideSprite(x, y, sprite):
-    """Check if a point (x, y) is inside the sprite's bounds"""
     print(f"Checking bounds - Click: ({x}, {y}), Sprite: ({sprite.x}, {sprite.y}) to ({sprite.x + sprite.width}, {sprite.y + sprite.height})")
     return (sprite.x <= x <= sprite.x + sprite.width and
             sprite.y <= y <= sprite.y + sprite.height)
 
 animSprite = pyglet.sprite.Sprite(dragon_animation)
-aniHurtingSprite = pyglet.sprite.Sprite(ani)
+aniHurtingSprite = pyglet.sprite.Sprite(ani, x=1900, y=450)
+animSprite.scale = 2.5            # increase this to make the dragon larger (try 2.0–3.0)
+animSprite.x = 1250              # move horizontally (increase to move right)
+animSprite.y = 400                # move vertically (increase to move up)
 
+
+aniHurtingSprite.scale = 0.3       # increase this to make the dragon larger (try 2.0–3.0)
+# aniHurtingSprite.x = 1250               # move horizontally (increase to move right)
+# aniHurtingSprite.y = 400                # move vertically (increase to move up)
 
 @window.event
 def on_mouse_press(x, y, button, modifiers):  # FIXED: Changed from onMousePress
