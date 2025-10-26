@@ -68,7 +68,9 @@ powerupP2 = [33,610, plr.pu[1]]
 powerupP3 = [33,370, plr.pu[2]]
 
 flautist = image.load('images/flautist.png')
-dragon = image.load('images/dragon.png')
+# dragon = image.load('images/dragon.png')
+ani = pyglet.resource.animation('images/dragon.gif')
+dragon = pyglet.sprite.Sprite(img=ani)
 playerHealthFull = image.load('images/playerHealthFull.png')
 playerHealthHalf = image.load('images/playerHealthHalf.png')
 playerHealthDead = image.load('images/playerHealthDead.png')
@@ -97,7 +99,8 @@ playerHealthStatus3 = healthImages[slot3_health]
 
 
 flautistSprite = pyglet.sprite.Sprite(img=flautist, x=380, y=-25, batch=batch)
-dragonSprite = pyglet.sprite.Sprite(img=dragon, x=1180, y=450, batch=batch)
+dragon_animation = pyglet.image.load_animation("images/dragon.gif")
+# dragonSprite = pyglet.sprite.Sprite(img=dragon, x=1180, y=450, batch=batch)
 playerHealthBackground= shapes.Rectangle(35, 50, 500, 130, color=(164,164,164,180), batch=batch)
 playerHealthBorder= shapes.Box(33, 48, 502, 132, thickness=5,color=(87,87,87), batch=batch)
 
@@ -136,6 +139,8 @@ def isPointInsideSprite(x, y, sprite):
     return (sprite.x <= x <= sprite.x + sprite.width and
             sprite.y <= y <= sprite.y + sprite.height)
 
+animSprite = pyglet.sprite.Sprite(dragon_animation)
+
 @window.event
 def on_mouse_press(x, y, button, modifiers):  # FIXED: Changed from onMousePress
     print(f"Mouse clicked at: {x}, {y}")
@@ -152,5 +157,6 @@ def on_draw():
         startButtonSprite.draw()
     else:
         batch.draw()
+        animSprite.draw()
 
 pyglet.app.run()
