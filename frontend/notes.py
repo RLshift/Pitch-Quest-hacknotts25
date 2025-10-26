@@ -27,3 +27,7 @@ def getNotes(song_name: str):
     if song_name not in _csv_files:
         print("Unknown Song")
     return _load_notes(_csv_files[song_name])
+
+notes = getNotes("kilby_girl")
+
+print(notes)
