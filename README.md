@@ -21,6 +21,8 @@
     * **Original Artwork:** [inamiku Nanami](https://www.vecteezy.com/members/inamiku)
 *   ***Player Health Dead:***
     * **Original Artwork:** [John3](https://toppng.com/john3)
+*   ***Dragon Health Bar:***
+    * **Original Artwork:** [Vector Images](https://www.vecteezy.com/members/vectortradition), [Kaleb da Silva Pereira](https://www.vecteezy.com/members/kalebsilva)
 
 *   ***Shield:***
     * **Original Artwork:** [Vector Images](https://www.vecteezy.com/members/vectortradition)
