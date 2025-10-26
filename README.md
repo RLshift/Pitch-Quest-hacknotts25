@@ -12,3 +12,5 @@
 #### Sprites:
 *   ***Flautist:***
     * **Original Artwork:** [Sophie Fung | Opixior](https://github.com/Opixior)
+*   ***Dragon:***
+    * **Original Artwork:** [Sophie Fung | Opixior](https://github.com/Opixior)
