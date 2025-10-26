@@ -13,8 +13,8 @@ from flask import Flask, redirect, request, session, url_for
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(64)
 
-client_id = '06d3f79e124a42bea66225da339d210f'
-client_secret = 'ba00699a77aa43238fa6b022ff19ca71'
+client_id = '04f118aeedc64b85b6754e35aa90f0f4'
+client_secret = '3467239dc34c4742bbbcc68db832e0e8'
 redirect_uri = 'https://127.0.0.1:5000/callback'
 scope = 'playlist-read-private, user-modify-playback-state'
 tracks = []
@@ -142,6 +142,6 @@ def playing(track_info, run_times):
 def runApp(name):
     global song_name 
     song_name = name
-    app.run(ssl_context=('cert.pem', 'key.pem'))
+    app.run(ssl_context=('../cert.pem', '../key.pem'))
 
 
