@@ -73,10 +73,31 @@ powerupP1 = [33,850, plr.pu[0]]
 powerupP2 = [33,610, plr.pu[1]]
 powerupP3 = [33,370, plr.pu[2]]
 
+flautist = image.load('images/flautist.png')
+# dragon = image.load('images/dragon.png')
+ani = pyglet.resource.animation('images/dragon.gif')
+dragon = pyglet.sprite.Sprite(img=ani)
+images = [pyglet.resource.image('images/injury.png'),
+          pyglet.resource.image('images/injury brighter.png'),
+          pyglet.resource.image('images/injury.png'),
+          pyglet.resource.image('images/injury brighter.png')]
 
+ani = pyglet.image.Animation.from_image_sequence(images, duration=0.1, loop=True)
+hurting = pyglet.sprite.Sprite(img=ani)
+playerHealthFull = image.load('images/playerHealthFull.png')
+playerHealthHalf = image.load('images/playerHealthHalf.png')
+playerHealthDead = image.load('images/playerHealthDead.png')
+shield = image.load('images/shield.png')
+potion = image.load('images/potion.png')
+doubleDamage = image.load('images/doubleDamage.png')
+dragonHealthBarImage = image.load('images/dragonHealthBarBorder.png')
+fireball = image.load('images/fireball.png')
+
+                                                                                                                      
+#0 = Full, 1 = Half, 2 = Dead, Complete player Health = 6
+# Complete player Health = 6
 def statusUpdate():
-    #0 = Full, 1 = Half, 2 = Dead, Complete player Health = 6
-    # Complete player Health = 6
+
     health = plr.getHealth()
 
     # Calculate health for each slot (0-2 per slot)
@@ -161,10 +182,11 @@ def redraw():
     powerUpStatus3 = statusUpdateValues[5]
     dragonHBRatio = statusUpdateValues[6]
 
-    flautistSprite = pyglet.sprite.Sprite(img=flautist, x=380, y=-25, batch=batch)
-    dragonSprite = pyglet.sprite.Sprite(img=dragon, x=1180, y=450, batch=batch)
-    playerHealthBackground= shapes.Rectangle(35, 50, 500, 130, color=(164,164,164,180), batch=batch)
-    playerHealthBorder= shapes.Box(33, 48, 502, 132, thickness=5,color=(87,87,87), batch=batch)
+flautistSprite = pyglet.sprite.Sprite(img=flautist, x=380, y=-25, batch=batch)
+dragon_animation = pyglet.image.load_animation("images/dragon.gif")
+#dragonSprite = pyglet.sprite.Sprite(img=dragon, x=1180, y=450, batch=batch)
+playerHealthBackground= shapes.Rectangle(35, 50, 500, 130, color=(164,164,164,180), batch=batch)
+playerHealthBorder= shapes.Box(33, 48, 502, 132, thickness=5,color=(87,87,87), batch=batch)
 
     inventoryBackground= shapes.Rectangle(55, 370, 200, 700, color=(164,164,164,220), batch=batch)
     inventoryBorder= shapes.Box(53, 372, 202, 702, thickness=8,color=(87,87,87), batch=batch)
@@ -263,10 +285,20 @@ def on_key_press(symbol, modifiers):
 
 
 def isPointInsideSprite(x, y, sprite):
-    """Check if a point (x, y) is inside the sprite's bounds"""
     print(f"Checking bounds - Click: ({x}, {y}), Sprite: ({sprite.x}, {sprite.y}) to ({sprite.x + sprite.width}, {sprite.y + sprite.height})")
     return (sprite.x <= x <= sprite.x + sprite.width and
             sprite.y <= y <= sprite.y + sprite.height)
+
+animSprite = pyglet.sprite.Sprite(dragon_animation)
+aniHurtingSprite = pyglet.sprite.Sprite(ani, x=1900, y=450)
+animSprite.scale = 2.5            # increase this to make the dragon larger (try 2.0–3.0)
+animSprite.x = 1250              # move horizontally (increase to move right)
+animSprite.y = 400                # move vertically (increase to move up)
+
+
+aniHurtingSprite.scale = 0.3       # increase this to make the dragon larger (try 2.0–3.0)
+# aniHurtingSprite.x = 1250               # move horizontally (increase to move right)
+# aniHurtingSprite.y = 400                # move vertically (increase to move up)
 
 @window.event
 def on_mouse_press(x, y, button, modifiers):  # FIXED: Changed from onMousePress
@@ -289,5 +321,7 @@ def on_draw():
         input_label.draw()
         user_text_label.draw()
 
+        animSprite.draw()
+        aniHurtingSprite.draw()
 
 pyglet.app.run()

@@ -136,12 +136,8 @@ def playing(track_info, run_times):
         return '<br>'
     else:
         return playing(track_info, run_times-1)
-    
-
 
 def runApp(name):
     global song_name 
     song_name = name
     app.run(ssl_context=('../cert.pem', '../key.pem'))
-
-
