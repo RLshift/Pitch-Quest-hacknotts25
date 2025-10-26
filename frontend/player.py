@@ -8,7 +8,8 @@ class Player:
         self.shield = False
         self.potion = False
         self.combo = False
-    
+        self.usingShield = False
+
     def getHealth(self):
         return self.health
 
@@ -24,16 +25,20 @@ class Player:
     def useShield(self):
         if(self.getShield()):
             self.shield = False
+            self.usingShield = True
         else:
             return False
     
+    def resetShield(self):
+        self.usingShield = False
+
     def getPotion(self):
         return self.potion
     
     def usePotion(self):
         if(self.getPotion()):
             self.potion = False
-            self.health += 1
+            self.fullHealth()
         else:
             return False
         

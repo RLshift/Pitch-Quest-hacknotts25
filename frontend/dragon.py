@@ -16,3 +16,4 @@ class Dragon:
     def checkAlive(self):
         if self.health == 0:
             self.alive = False
+
