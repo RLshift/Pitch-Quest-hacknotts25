@@ -9,6 +9,7 @@ import math
 import time
 import numpy as np
 import sounddevice as sd
+import threading
 from collections import deque
 
 # ---------- Adaptive noise cancellation ----------
@@ -19,13 +20,13 @@ NOISE_MULTIPLIER = 1.8  # lower = more sensitive, higher = more strict
 SAMPLE_RATE = 44100        # Hz
 FRAME_SIZE = 4096          # bigger = better low-frequency detection
 HOP_SIZE = 512             # how often we run detection (in samples)
-BUFFER_MAX_SECONDS = 5.0   # safety cap for internal queue
 SMOOTHING = 6              # number of recent frequency estimates to median-smooth
+BUFFER_MAX_SECONDS = 5.0
 
 # Limits for expected pitch (helps avoid octave errors)
-MIN_FREQUENCY = 250.0     # e.g., low C2 ~ 65Hz
-MAX_FREQUENCY = 2000.0   # upper bound for detection
-LOWEST_NOTE_HZ = 246.0   # B3 lower
+MIN_FREQUENCY = 250.0
+MAX_FREQUENCY = 2000.0
+LOWEST_NOTE_HZ = 246.0  # B3 lower
 
 device = None
 
@@ -45,7 +46,6 @@ def freq_to_note_name(freq, A4=440.0):
     return (f"{note_name}{octave}", midi_round, cents)
 
 
-# ---------- pitch detection ----------
 def detect_pitch_autocorr(x, fs, fmin=MIN_FREQUENCY, fmax=MAX_FREQUENCY):
     x = x * np.hanning(len(x))
     n = len(x)
@@ -91,94 +91,113 @@ def detect_pitch_autocorr(x, fs, fmin=MIN_FREQUENCY, fmax=MAX_FREQUENCY):
     return freq
 
 
-# ---------- audio callback ----------
-q = queue.Queue(maxsize=int(SAMPLE_RATE / HOP_SIZE * BUFFER_MAX_SECONDS))
+# ---------- Thread-safe note queue ----------
+note_queue = queue.Queue(maxsize=100)  # shared with your game
+_audio_data_queue = queue.Queue(maxsize=int(SAMPLE_RATE / HOP_SIZE * BUFFER_MAX_SECONDS))
+stop_flag = False
 
 
 def audio_callback(indata, frames, time_info, status):
     if status:
         print(status, file=sys.stderr)
-    if indata.ndim > 1:
-        data = indata[:, 0]
-    else:
-        data = indata
+    data = indata[:, 0] if indata.ndim > 1 else indata
     try:
-        q.put_nowait(data.copy())
+        _audio_data_queue.put_nowait(data.copy())
     except queue.Full:
         pass
 
 
-def run_realtime():
+def _audio_loop():
+    global stop_flag
+
     stream = sd.InputStream(
         channels=1, samplerate=SAMPLE_RATE, blocksize=HOP_SIZE,
         callback=audio_callback, device=device
     )
 
     with stream:
-        print("Listening: Play a note!")
         buffer = np.zeros(0, dtype=np.float32)
         recent_freqs = []
         last_note = None
         note_start_time = None
 
-        try:
-            while True:
-                data = q.get()
-                buffer = np.concatenate((buffer, data))
+        while not stop_flag:
+            try:
+                data = _audio_data_queue.get(timeout=0.05)
+            except queue.Empty:
+                continue
 
-                while len(buffer) >= FRAME_SIZE:
-                    frame = buffer[:FRAME_SIZE]
-                    buffer = buffer[HOP_SIZE:]
+            buffer = np.concatenate((buffer, data))
 
-                    if frame.dtype.kind in 'iu':
-                        frame = frame.astype(np.float32) / np.iinfo(frame.dtype).max
-                    else:
-                        frame = frame.astype(np.float32)
+            while len(buffer) >= FRAME_SIZE:
+                frame = buffer[:FRAME_SIZE]
+                buffer = buffer[HOP_SIZE:]
 
-                    energy = np.sum(frame ** 2) / len(frame)
-                    ENERGY_HISTORY.append(energy)
-                    adaptive_threshold = np.mean(
-                        ENERGY_HISTORY) * NOISE_MULTIPLIER if ENERGY_HISTORY else 1e-6
+                frame = frame.astype(np.float32)
+                energy = np.sum(frame ** 2) / len(frame)
+                ENERGY_HISTORY.append(energy)
+                adaptive_threshold = np.mean(ENERGY_HISTORY) * NOISE_MULTIPLIER if ENERGY_HISTORY else 1e-6
 
-                    if energy < adaptive_threshold:
-                        freq = None
-                    else:
-                        freq = detect_pitch_autocorr(frame, SAMPLE_RATE)
+                if energy < adaptive_threshold:
+                    continue
 
-                    display_freq = None
-                    if freq is not None and freq >= LOWEST_NOTE_HZ:
-                        recent_freqs.append(freq)
-                        if len(recent_freqs) > SMOOTHING:
-                            recent_freqs.pop(0)
-                        display_freq = float(np.median(recent_freqs))
+                freq = detect_pitch_autocorr(frame, SAMPLE_RATE)
+                if freq is None or freq < LOWEST_NOTE_HZ:
+                    continue
 
-                    if display_freq is not None:
-                        note_name, midi, cents = freq_to_note_name(display_freq)
+                recent_freqs.append(freq)
+                if len(recent_freqs) > SMOOTHING:
+                    recent_freqs.pop(0)
+                display_freq = float(np.median(recent_freqs))
 
-                        # Start timer if new note
-                        if note_name != last_note:
-                            if last_note is not None and note_start_time is not None:
-                                duration = time.time() - note_start_time
-                                print(f"→ {last_note} duration: {duration:.2f}s")
+                note_name, midi, cents = freq_to_note_name(display_freq)
 
-                            cent_str = f"{cents:+}¢" if cents is not None else ""
-                            print(f"Freq: {display_freq:7.2f} Hz → {note_name} {cent_str}")
-                            last_note = note_name
-                            note_start_time = time.time()
+                # Handle note start/duration tracking
+                current_time = time.time()
+                if note_name != last_note:
+                    if last_note is not None and note_start_time is not None:
+                        duration = current_time - note_start_time
+                        # Send finished note to queue with duration
+                        try:
+                            note_queue.put_nowait({
+                                "note": last_note,
+                                "duration": duration,
+                                "timestamp": current_time
+                            })
+                        except queue.Full:
+                            note_queue.get_nowait()  # drop oldest
+                            note_queue.put_nowait({
+                                "note": last_note,
+                                "duration": duration,
+                                "timestamp": current_time
+                            })
+                    # Start new note
+                    last_note = note_name
+                    note_start_time = current_time
 
-                time.sleep(0.001)
 
-        except KeyboardInterrupt:
-            # Print duration of last note before exiting
-            if last_note and note_start_time:
-                duration = time.time() - note_start_time
-                print(f"\n→ {last_note} duration: {duration:.2f}s")
-            print("\nRecording stopped by user")
-        except Exception as e:
-            print("\nError:", e)
-        finally:
-            stream.close()
+def start_audio_thread():
+    thread = threading.Thread(target=_audio_loop, daemon=True)
+    thread.start()
+    return thread
 
+
+def stop_audio():
+    global stop_flag
+    stop_flag = True
 
 if __name__ == "__main__":
-    run_realtime()
+    print("Starting live audio input... (Press Ctrl+C to stop)")
+    start_audio_thread()
+
+    try:
+        while True:
+            # Continuously read detected notes from the queue
+            try:
+                note_event = note_queue.get(timeout=1.0)
+                print(f"{note_event['note']}  ({note_event['duration']:.2f}s)")
+            except queue.Empty:
+                pass
+    except KeyboardInterrupt:
+        print("\nStopping...")
+        stop_audio()
