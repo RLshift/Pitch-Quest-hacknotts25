@@ -30,3 +30,5 @@
     * **Original Artwork:** [Vector Images](https://www.vecteezy.com/members/vectortradition)
 *   ***DoubleDamageBook:***
     * **Original Artwork:** [Vector Images](https://www.vecteezy.com/members/vectortradition)
+*   ***Fireball:***
+    * **Original Artwork:** [Vector Images](https://www.vecteezy.com/members/vectortradition)

@@ -40,6 +40,7 @@ shield = image.load('images/shield.png')
 potion = image.load('images/potion.png')
 doubleDamage = image.load('images/doubleDamage.png')
 dragonHealthBarImage = image.load('images/dragonHealthBarBorder.png')
+fireball = image.load('images/fireball.png')
 
 
 flautistSprite = pyglet.sprite.Sprite(img=flautist, x=380, y=-25, batch=batch)
