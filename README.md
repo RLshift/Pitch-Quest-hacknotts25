@@ -9,6 +9,8 @@ v0.1 -- All technical aspects of game is working.
 ### Artwork Credits
 
 #### Backgrounds:
+*   ***Start Game Screen:***
+    * **Original Artwork:** [Dreamly Studios](https://studiosdreamly.editorx.io/dreamlystudios), [**Source**](https://www.fab.com/listings/9d381a48-73be-4a8a-b218-25bc391678d5)
 *   ***Main Game Screen:***
     * **Original Artwork:** [Dreamly Studios](https://studiosdreamly.editorx.io/dreamlystudios), [**Source**](https://assetstore.unity.com/packages/2d/environments/background-pixel-village-1-284950?srsltid=AfmBOopuaefBXz5FMuZRwcFt8REyArVNzEEJD4_JJB3D_peIisspJROn#publisher)
 
