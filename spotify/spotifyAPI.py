@@ -116,6 +116,7 @@ def playing(track_info, run_times):
         return playing(track_info, run_times-1)
     
 
+def runApp():
+    if __name__ == '__main__':
+        app.run(ssl_context=('cert.pem', 'key.pem'))
 
-if __name__ == '__main__':
-    app.run(ssl_context=('cert.pem', 'key.pem'))
